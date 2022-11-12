@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cliinic/services/remote_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -6,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../../config/routes.dart';
+import '../../../models/lista.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,8 +20,26 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
+  TextEditingController usuarioController = new TextEditingController();
+
+  validate_user(String email_usuario) async {
+    Post? personas = await RemoteService().getPersonas();
+    if (personas != null) {
+      print(personas.lista);
+      print(email_usuario);
+      for (final person in personas.lista) {
+        var persona_actual = person;
+        //print(persona_actual.nombre);
+        if (persona_actual.email == email_usuario) {
+          Get.offNamed(Routes.getHomeRoute());
+        }
+      }
+    }
+  }
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    String nombreUsuario;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -33,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: size.width * 0.20,
                 ),
                 TextField(
+                  controller: usuarioController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     labelText: 'Ingrese Su correo o numero de telefono',
@@ -89,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.white,
                 ),
                 ElevatedButton(
-                  onPressed: () => Get.offNamed(Routes.getHomeRoute()),
+                  onPressed: () => {validate_user(usuarioController.text)},
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
