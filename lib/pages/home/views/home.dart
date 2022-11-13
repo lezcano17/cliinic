@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cliinic/pages/common/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -230,6 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(),
       body: Column(
         children: [
@@ -263,22 +265,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) {
                     if (_buscarTexto == '') {
                       return Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-                          elevation: 0,
-                          child: ListTile(
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                        elevation: 0,
+                        child: GestureDetector(
+                            child: ListTile(
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (personas != null)
+                                      Text(
+                                          personas!.lista[index].nombreCompleto)
+                                    else
+                                      const Text("Laburando")
+                                  ]),
+                            ),
+                            onTap: () => {
                                   if (personas != null)
-                                    Text(personas!.lista[index].nombreCompleto)
-                                  else
-                                    const Text("Laburando")
-                                ]),
-                          ));
+                                    AwesomeDialog(
+                                      context: context,
+                                      animType: AnimType.scale,
+                                      dialogType: DialogType.noHeader,
+                                      body: Center(
+                                        child: Text(
+                                          personas!.lista[index].nombreCompleto,
+                                          style: const TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                      ),
+                                      title: 'This is Ignored',
+                                      desc: 'This is also Ignored',
+                                      btnOkOnPress: () {},
+                                    )..show(),
+                                }),
+                      );
                     } else {
                       if (personas?.lista[index].nombre != null &&
                               personas!.lista[index].nombre!
