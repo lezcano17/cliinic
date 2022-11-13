@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../../config/routes.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   Post? personas;
   var isLoaded = false;
+  String _buscarTexto = '';
 
   List<Map<String, dynamic>> _journals = [];
 
@@ -138,17 +140,91 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
-      body: Visibility(
-        visible: isLoaded,
-        replacement: const Center(
-          child: CircularProgressIndicator(),
-        ),
-        child: ListView.builder(
-          itemCount: personas?.lista.length,
-          itemBuilder: (context, index) {
-            return Text(personas!.lista[index].nombreCompleto);
-          },
-        ),
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextField(
+                  decoration: const InputDecoration(
+                    hintText: 'Filtrar pacientes',
+                    prefixIcon: Icon(Icons.person_search),
+                  ),
+                  onChanged: ((value) => {
+                        setState(
+                          (() => {_buscarTexto = value}),
+                        )
+                      }),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: personas?.lista.length,
+                  itemBuilder: (context, index) {
+                    if (_buscarTexto == '') {
+                      return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                          elevation: 0,
+                          child: ListTile(
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (personas != null)
+                                    Text(personas!.lista[index].nombreCompleto)
+                                  else
+                                    const Text("Laburando")
+                                ]),
+                          ));
+                    } else {
+                      if (personas?.lista[index].nombre != null &&
+                              personas!.lista[index].nombre!
+                                  .toLowerCase()
+                                  .contains(_buscarTexto.toLowerCase()) ||
+                          (personas?.lista[index].apellido != null &&
+                              personas!.lista[index].apellido!
+                                  .toLowerCase()
+                                  .contains(_buscarTexto.toLowerCase()))) {
+                        return Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            margin:
+                                const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            elevation: 0,
+                            child: ListTile(
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (personas != null)
+                                      Text(
+                                          personas!.lista[index].nombreCompleto)
+                                    else
+                                      const Text("NULL")
+                                  ]),
+                            ));
+                      } else {
+                        return Container();
+                      }
+                    }
+                    // personas!.lista[index].nombreCompleto);
+                  }),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add), onPressed: () => _showForm(0)),
