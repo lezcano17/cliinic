@@ -7,6 +7,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:date_field/date_field.dart';
+import 'package:intl/intl.dart';
 
 import '../../../config/routes.dart';
 import '../../../models/lista.dart';
@@ -58,13 +60,30 @@ class _HomeScreenState extends State<HomeScreen> {
     get_personas();
   }
 
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _apellidoController = TextEditingController();
+  final TextEditingController _telefonoController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _cedulaController = TextEditingController();
+  final TextEditingController _rucController = TextEditingController();
+  final TextEditingController _tipoPersonaController = TextEditingController();
+  final TextEditingController _fechaNacController = TextEditingController();
 
   void _showForm(int? id) async {
     if (id != null) {
       log("FUNCA");
     }
+
+    final Map<String, String> datosPaciente = {
+      'nombre': '',
+      'apellido': '',
+      'email': '',
+      'telefono': '',
+      'ruc': '',
+      'cedula': '',
+      'tipoPersona': '',
+      'fechaNacimiento': '',
+    };
 
     showModalBottomSheet(
         context: context,
@@ -82,36 +101,112 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  ListTile(
+                      leading: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Icon(
+                                Icons.arrow_back) // the arrow back icon
+                            ),
+                      ),
+                      title: const Center(
+                          child: Text("Agregar Persona") // Your desired title
+                          )),
                   TextField(
-                    controller: _titleController,
-                    decoration: const InputDecoration(hintText: 'Title'),
+                    controller: _nombreController,
+                    decoration: const InputDecoration(hintText: 'Nombre'),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   TextField(
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(hintText: 'Description'),
+                    controller: _apellidoController,
+                    decoration: const InputDecoration(hintText: 'Apellido'),
+                  ),
+                  TextField(
+                    controller: _telefonoController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(hintText: 'Teléfono'),
+                  ),
+                  TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(hintText: 'Email'),
+                  ),
+                  TextField(
+                    controller: _cedulaController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(hintText: 'Cedula'),
+                  ),
+                  TextField(
+                    controller: _rucController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(hintText: 'Ruc'),
+                  ),
+                  TextField(
+                    controller: _tipoPersonaController,
+                    decoration:
+                        const InputDecoration(hintText: 'Tipo de Persona'),
+                  ),
+                  TextField(
+                    readOnly: true,
+                    controller: _fechaNacController,
+                    decoration: const InputDecoration(
+                        icon: Icon(Icons.calendar_today_rounded),
+                        labelText: "Fecha de Nacimiento"),
+                    onTap: () async {
+                      DateTime? fechaNac = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2023));
+
+                      if (fechaNac != null) {
+                        setState(() {
+                          _fechaNacController.text =
+                              DateFormat('yyyy-MM-dd').format(fechaNac);
+                        });
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () async {
-                      // Save new journal
-                      if (id == null) {
-                        await _addItem();
-                      }
+                    onPressed: () {
+                      print(_nombreController.text);
+                      print(_apellidoController.text);
+                      print(_telefonoController.text);
+                      print(_emailController.text);
+                      print(_cedulaController.text);
+                      print(_rucController.text);
+                      print(_fechaNacController.text);
+                      print(_tipoPersonaController.text);
 
-                      if (id != null) {
-                        await _updateItem(id);
-                      }
+                      var nombre = _nombreController.text;
+                      var apellido = _apellidoController.text;
+                      var email = _emailController.text;
+                      var telefono = _telefonoController.text;
+                      var ruc = _rucController.text;
+                      var cedula = _cedulaController.text;
+                      var tipoPersona = _tipoPersonaController.text;
+                      var FechaNacimiento =
+                          _fechaNacController.text + ' 00:00:00';
 
-                      // Clear the text fields
-                      _titleController.text = '';
-                      _descriptionController.text = '';
+                      print(FechaNacimiento);
 
-                      // Close the bottom sheet
+                      var response = RemoteService().postPersonas(
+                          nombre,
+                          apellido,
+                          email,
+                          telefono,
+                          ruc,
+                          cedula,
+                          tipoPersona,
+                          FechaNacimiento);
+
                       Navigator.of(context).pop();
                     },
                     child: Text(id == null ? 'Create New' : 'Update'),

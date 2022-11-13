@@ -7,11 +7,53 @@ class RemoteService {
   Future<Post?> getPersonas() async {
     var client = http.Client();
 
-    var uri = Uri.parse('http://equipoyosh.com/stock-nutrinatalia/persona');
+    var uri = Uri.parse('https://equipoyosh.com/stock-nutrinatalia/persona');
     var response = await client.get(uri);
     if (response.statusCode == 200) {
       var datos = response.body;
       return postFromJson(datos);
+    }
+  }
+
+  Future<String> postPersonas(
+      String nombre,
+      String apellido,
+      String email,
+      String telefono,
+      String ruc,
+      String cedula,
+      String tipoPersona,
+      String fechaNacimiento) async {
+    var client = http.Client();
+
+    var uri = Uri.parse('https://equipoyosh.com/stock-nutrinatalia/persona');
+    var response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'nombre': nombre,
+        'apellido': apellido,
+        'email': email,
+        'telefono': telefono,
+        'ruc': ruc,
+        'cedula': cedula,
+        'tipoPersona': tipoPersona,
+        'fechaNacimiento': fechaNacimiento
+      }),
+    );
+
+    print('xd');
+
+    print(response.statusCode);
+
+    if (response.statusCode == 201 || response.statusCode == 301) {
+      print('agregado');
+      return 'AGREGADO';
+    } else {
+      print('error');
+      return 'ERROR';
     }
   }
 }
