@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBarHome(),
       body: Visibility(
         visible: isLoaded,
         replacement: const Center(
