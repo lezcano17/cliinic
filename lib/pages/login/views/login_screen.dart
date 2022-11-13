@@ -26,11 +26,11 @@ class _LoginScreenState extends State<LoginScreen> {
     Post? personas = await RemoteService().getPersonas();
     if (personas != null) {
       print(personas.lista);
-      print(email_usuario);
+      print(email_usuario.runtimeType);
       for (final person in personas.lista) {
         var persona_actual = person;
         //print(persona_actual.nombre);
-        if (persona_actual.email == email_usuario) {
+        if (persona_actual.email == email_usuario && email_usuario != '') {
           Get.offNamed(Routes.getHomeRoute());
         }
       }
