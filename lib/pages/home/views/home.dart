@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import '../../../config/routes.dart';
+import '../../../models/lista.dart';
+import '../../../services/remote_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  Post? personas;
+  var isLoaded = false;
 
   void _onTapNavBar(int index) {
     setState(() {
@@ -18,11 +26,37 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void get_personas() async {
+    personas = await RemoteService().getPersonas();
+    print('xd');
+    if (personas != null) {
+      setState(() {
+        isLoaded = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    get_personas();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(child: Text("Cliinic")),
+      body: Visibility(
+        visible: isLoaded,
+        replacement: const Center(
+          child: CircularProgressIndicator(),
+        ),
+        child: ListView.builder(
+          itemCount: personas?.lista.length,
+          itemBuilder: (context, index) {
+            return Text(personas!.lista[index].nombreCompleto);
+          },
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.cyan,

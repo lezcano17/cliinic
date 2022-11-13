@@ -85,7 +85,7 @@ class Lista {
   dynamic fechaHoraAprobContrato;
   dynamic soloUsuariosDelSistema;
   dynamic soloPersonasTaxfree;
-  String? nombreCompleto;
+  String nombreCompleto;
   double limiteCredito;
   DateTime? fechaNacimiento;
   dynamic soloProximosCumpleanhos;
