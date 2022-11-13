@@ -29,11 +29,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Map<String, dynamic>> _journals = [];
 
+  //Hola profe sosa si usted esta leyendo esto ahora usted es un genio.
   bool _isLoading = true;
   void _onTapNavBar(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    if (_selectedIndex == 0) {
+      Get.toNamed(Routes.getHomeRoute());
+    }
+    if (_selectedIndex == 1) {
+      Get.toNamed(Routes.getReservaRoute());
+    }
   }
 
   void _refreshJournals() async {
@@ -73,17 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (id != null) {
       log("FUNCA");
     }
-
-    final Map<String, String> datosPaciente = {
-      'nombre': '',
-      'apellido': '',
-      'email': '',
-      'telefono': '',
-      'ruc': '',
-      'cedula': '',
-      'tipoPersona': '',
-      'fechaNacimiento': '',
-    };
 
     showModalBottomSheet(
         context: context,
@@ -327,30 +323,30 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.cyan,
         unselectedItemColor: Colors.white,
         selectedItemColor: Colors.blue,
-        unselectedIconTheme: IconThemeData(
+        unselectedIconTheme: const IconThemeData(
           color: Colors.white,
           size: 25,
           opacity: 1,
         ),
-        selectedIconTheme: IconThemeData(
+        selectedIconTheme: const IconThemeData(
           color: Colors.blue,
           size: 30,
           opacity: 1,
         ),
         currentIndex: _selectedIndex,
         onTap: (index) => _onTapNavBar(index),
-        items: [
+        items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.music_note_outlined),
-            label: 'Test',
+            icon: Icon(Icons.person),
+            label: 'Pacientes',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.outbox_rounded),
-            label: 'Prueba',
+            label: 'Reservas',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Usuario',
+            label: 'Ficha Clinica',
           ),
         ],
       ),

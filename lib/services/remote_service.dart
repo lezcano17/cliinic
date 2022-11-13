@@ -56,4 +56,24 @@ class RemoteService {
       return 'ERROR';
     }
   }
+
+  Future<String> deletePersona(int id) async {
+    var uri =
+        Uri.parse('https://equipoyosh.com/stock-nutrinatalia/persona/$id');
+    var response = await http.delete(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      print('se elimino, tranquilo');
+      return 'eliminado';
+    } else {
+      print('error eliminando');
+      throw Exception('error eliminando');
+    }
+  }
 }
