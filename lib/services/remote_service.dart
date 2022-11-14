@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:cliinic/models/lista.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/reservas.dart';
+
 class RemoteService {
   Future<Post?> getPersonas() async {
     var client = http.Client();
@@ -74,6 +76,53 @@ class RemoteService {
     } else {
       print('error eliminando');
       throw Exception('error eliminando');
+    }
+  }
+
+  Future<Reserva?> getReservas() async {
+    var uri = Uri.parse('https://equipoyosh.com/stock-nutrinatalia/reserva');
+    var response = await http.get(uri);
+    if (response.statusCode == 200) {
+      var datos = response.body;
+      return reservaFromJson(datos);
+    }
+  }
+
+  Future<String> postReserva(
+    String idCliente,
+    String idEmpleado,
+    String fechaReserva,
+    String horaInicio,
+    String horaFin,
+  ) async {
+    var uri = Uri.parse('https://equipoyosh.com/stock-nutrinatalia/reserva');
+    var response = await http.post(
+      uri,
+      headers: <String, String>{
+        'usuario': 'usuario1',
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'idEmpleado': {'idPersona': idEmpleado},
+        'idCliente': {'idPersona': idCliente},
+        'fechaCadena': fechaReserva,
+        'horaInicioCadena': horaInicio,
+        'horaFinCadena': horaFin
+      }),
+    );
+
+    print('xd');
+
+    print(response.statusCode);
+
+    if (response.statusCode == 201 ||
+        response.statusCode == 301 ||
+        response.statusCode == 200) {
+      print('agregado');
+      return 'AGREGADO';
+    } else {
+      print('error');
+      return 'ERROR';
     }
   }
 }

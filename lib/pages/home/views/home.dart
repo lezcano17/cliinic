@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Map<String, dynamic>> _journals = [];
 
-  //Hola profe sosa si usted esta leyendo esto ahora usted es un genio.
   bool _isLoading = true;
   void _onTapNavBar(int index) {
     setState(() {
