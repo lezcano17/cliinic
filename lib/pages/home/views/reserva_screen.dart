@@ -105,7 +105,7 @@ class _ReservaScreenState extends State<ReservaScreen> {
                     );
 
                     if (horaInicio != null) {
-                      var df = DateFormat("h:mm a");
+                      var df = DateFormat("h:mm");
                       var dt = df.parse(horaInicio.format(context));
                       setState(() {
                         _horaReservaController.text =
@@ -127,7 +127,7 @@ class _ReservaScreenState extends State<ReservaScreen> {
                     );
 
                     if (horaFin != null) {
-                      var df = DateFormat("h:mm a");
+                      var df = DateFormat("h:mm");
                       var dt = df.parse(horaFin.format(context));
                       setState(() {
                         _horaResFinController.text =
