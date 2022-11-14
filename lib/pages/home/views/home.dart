@@ -272,6 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: ListTile(
                               contentPadding:
                                   const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              leading: Icon(Icons.account_circle_outlined),
                               title: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
