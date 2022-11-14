@@ -1,3 +1,4 @@
+import 'package:cliinic/pages/home/views/ficha_clinica_screen.dart';
 import 'package:cliinic/pages/home/views/home.dart';
 import 'package:cliinic/pages/login/views/login_screen.dart';
 import 'package:get/get.dart';
@@ -9,11 +10,13 @@ class Routes {
   static const String _home = '/home';
   static const String _crud = '/home/crud';
   static const String _reservas = '/home/reserva';
+  static const String _fichas = '/home/ficha';
 
   static String getLoginRoute() => _login;
   static String getHomeRoute() => _home;
   static String getCrudRoute() => _crud;
   static String getReservaRoute() => _reservas;
+  static String getFichaRoute() => _fichas;
 
   static List<GetPage> routes = [
     GetPage(
@@ -26,8 +29,10 @@ class Routes {
       transition: Transition.rightToLeft,
     ),
     GetPage(
-        name: getReservaRoute(),
-        page: () => const ReservaScreen(),
-        transition: Transition.rightToLeft)
+      name: getReservaRoute(),
+      page: () => const ReservaScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(name: getFichaRoute(), page: () => const FichaScreen()),
   ];
 }

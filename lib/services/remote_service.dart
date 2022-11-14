@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cliinic/models/ficha.dart';
 import 'package:cliinic/models/lista.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,6 +15,58 @@ class RemoteService {
     if (response.statusCode == 200) {
       var datos = response.body;
       return postFromJson(datos);
+    }
+  }
+
+  Future<Ficha?> getFichas() async {
+    var client = http.Client();
+
+    var uri =
+        Uri.parse('https://equipoyosh.com/stock-nutrinatalia/fichaClinica');
+    var response = await client.get(uri);
+    if (response.statusCode == 200) {
+      var datos = response.body;
+      return fichaFromJson(datos);
+    }
+  }
+
+  Future<String> postFichas(
+    String motivo,
+    String diagnostico,
+    String observacion,
+    String idempleado,
+    String idcliente,
+    String idtipoproducto,
+  ) async {
+    var client = http.Client();
+
+    var uri =
+        Uri.parse('https://equipoyosh.com/stock-nutrinatalia/fichaClinica');
+    var response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'motivoConsulta': motivo,
+        'diagnostico': diagnostico,
+        'observacion': observacion,
+        'idEmpleado': idempleado,
+        'idCliente': idcliente,
+        'idTipoProducto': idtipoproducto,
+      }),
+    );
+
+    print('xd');
+
+    print(response.statusCode);
+
+    if (response.statusCode == 201 || response.statusCode == 301) {
+      print('agregado');
+      return 'AGREGADO';
+    } else {
+      print('error');
+      return 'ERROR';
     }
   }
 

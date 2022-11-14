@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cliinic/models/ficha.dart';
 import 'package:cliinic/pages/common/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -15,23 +16,25 @@ import '../../../config/routes.dart';
 import '../../../models/lista.dart';
 import '../../../services/remote_service.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class FichaScreen extends StatefulWidget {
+  const FichaScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<FichaScreen> createState() => _FichaScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _FichaScreenState extends State<FichaScreen> {
   int _selectedIndex = 0;
-  Post? personas;
+  Ficha? fichas;
   var isLoaded = false;
   String _buscarTexto = '';
 
   List<Map<String, dynamic>> _journals = [];
 
+  //Hola profe sosa si usted esta leyendo esto ahora usted es un genio.
   bool _isLoading = true;
   void _onTapNavBar(int index) {
+    print(index);
     setState(() {
       _selectedIndex = index;
     });
@@ -53,10 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void get_personas() async {
-    personas = await RemoteService().getPersonas();
+  void get_fichas() async {
+    fichas = await RemoteService().getFichas();
     print('xd');
-    if (personas != null) {
+    if (fichas != null) {
       setState(() {
         isLoaded = true;
       });
@@ -67,17 +70,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _refreshJournals();
-    get_personas();
+    get_fichas();
   }
 
-  final TextEditingController _nombreController = TextEditingController();
-  final TextEditingController _apellidoController = TextEditingController();
-  final TextEditingController _telefonoController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _cedulaController = TextEditingController();
-  final TextEditingController _rucController = TextEditingController();
-  final TextEditingController _tipoPersonaController = TextEditingController();
-  final TextEditingController _fechaNacController = TextEditingController();
+  final TextEditingController _motivoController = TextEditingController();
+  final TextEditingController _diagnosticoController = TextEditingController();
+  final TextEditingController _observacionController = TextEditingController();
+  final TextEditingController _idEmpleadoController = TextEditingController();
+  final TextEditingController _idClienteController = TextEditingController();
+  final TextEditingController _idTipoProductoController =
+      TextEditingController();
 
   void _showForm(int? id) async {
     if (id != null) {
@@ -115,96 +117,64 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text("Agregar Persona") // Your desired title
                           )),
                   TextField(
-                    controller: _nombreController,
-                    decoration: const InputDecoration(hintText: 'Nombre'),
+                    controller: _motivoController,
+                    decoration: const InputDecoration(
+                        hintText: 'Motivo de la Consulta'),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   TextField(
-                    controller: _apellidoController,
-                    decoration: const InputDecoration(hintText: 'Apellido'),
+                    controller: _diagnosticoController,
+                    decoration: const InputDecoration(hintText: 'Diagnóstico'),
                   ),
                   TextField(
-                    controller: _telefonoController,
+                    controller: _observacionController,
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(hintText: 'Teléfono'),
+                    decoration: const InputDecoration(hintText: 'Observación'),
                   ),
                   TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(hintText: 'Email'),
+                    controller: _idEmpleadoController,
+                    decoration: const InputDecoration(hintText: 'Id Empleado'),
                   ),
                   TextField(
-                    controller: _cedulaController,
+                    controller: _idClienteController,
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(hintText: 'Cedula'),
+                    decoration: const InputDecoration(hintText: 'Id Cliente'),
                   ),
                   TextField(
-                    controller: _rucController,
+                    controller: _idTipoProductoController,
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(hintText: 'Ruc'),
-                  ),
-                  TextField(
-                    controller: _tipoPersonaController,
                     decoration:
-                        const InputDecoration(hintText: 'Tipo de Persona'),
-                  ),
-                  TextField(
-                    readOnly: true,
-                    controller: _fechaNacController,
-                    decoration: const InputDecoration(
-                        icon: Icon(Icons.calendar_today_rounded),
-                        labelText: "Fecha de Nacimiento"),
-                    onTap: () async {
-                      DateTime? fechaNac = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime(2023));
-
-                      if (fechaNac != null) {
-                        setState(() {
-                          _fechaNacController.text =
-                              DateFormat('yyyy-MM-dd').format(fechaNac);
-                        });
-                      }
-                    },
+                        const InputDecoration(hintText: 'Id Tipo Producto'),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      print(_nombreController.text);
-                      print(_apellidoController.text);
-                      print(_telefonoController.text);
-                      print(_emailController.text);
-                      print(_cedulaController.text);
-                      print(_rucController.text);
-                      print(_fechaNacController.text);
-                      print(_tipoPersonaController.text);
+                      print(_motivoController.text);
+                      print(_diagnosticoController.text);
+                      print(_observacionController.text);
+                      print(_idEmpleadoController.text);
+                      print(_idClienteController.text);
+                      print(_idTipoProductoController.text);
 
-                      var nombre = _nombreController.text;
-                      var apellido = _apellidoController.text;
-                      var email = _emailController.text;
-                      var telefono = _telefonoController.text;
-                      var ruc = _rucController.text;
-                      var cedula = _cedulaController.text;
-                      var tipoPersona = _tipoPersonaController.text;
-                      var FechaNacimiento =
-                          _fechaNacController.text + ' 00:00:00';
+                      var motivo = _motivoController.text;
+                      var diagnostico = _diagnosticoController.text;
+                      var observacion = _observacionController.text;
+                      var idempleado = _idEmpleadoController.text;
+                      var idcliente = _idClienteController.text;
+                      var idtipoproducto = _idTipoProductoController.text;
 
-                      print(FechaNacimiento);
-
-                      var response = RemoteService().postPersonas(
-                          nombre,
-                          apellido,
-                          email,
-                          telefono,
-                          ruc,
-                          cedula,
-                          tipoPersona,
-                          FechaNacimiento);
+                      var response = RemoteService().postFichas(
+                        motivo,
+                        diagnostico,
+                        observacion,
+                        idempleado,
+                        idcliente,
+                        idtipoproducto,
+                      );
 
                       Navigator.of(context).pop();
                     },
@@ -244,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 TextField(
                   decoration: const InputDecoration(
-                    hintText: 'Filtrar pacientes',
+                    hintText: 'Filtrar fichas',
                     prefixIcon: Icon(Icons.person_search),
                   ),
                   onChanged: ((value) => {
@@ -263,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: personas?.lista.length,
+                  itemCount: fichas?.ficha.length,
                   itemBuilder: (context, index) {
                     if (_buscarTexto == '') {
                       return Card(
@@ -278,22 +248,21 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    if (personas != null)
-                                      Text(
-                                          personas!.lista[index].nombreCompleto)
+                                    if (fichas != null)
+                                      Text(fichas!.ficha[index].motivoConsulta)
                                     else
                                       const Text("Laburando")
                                   ]),
                             ),
                             onTap: () => {
-                                  if (personas != null)
+                                  if (fichas != null)
                                     AwesomeDialog(
                                       context: context,
                                       animType: AnimType.scale,
                                       dialogType: DialogType.noHeader,
                                       body: Center(
                                         child: Text(
-                                          personas!.lista[index].nombreCompleto,
+                                          fichas!.ficha[index].motivoConsulta,
                                           style: const TextStyle(
                                               fontStyle: FontStyle.italic),
                                         ),
@@ -305,12 +274,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }),
                       );
                     } else {
-                      if (personas?.lista[index].nombre != null &&
-                              personas!.lista[index].nombre!
+                      if (fichas?.ficha[index].motivoConsulta != null &&
+                              fichas!.ficha[index].motivoConsulta!
                                   .toLowerCase()
                                   .contains(_buscarTexto.toLowerCase()) ||
-                          (personas?.lista[index].apellido != null &&
-                              personas!.lista[index].apellido!
+                          (fichas?.ficha[index].diagnostico != null &&
+                              fichas!.ficha[index].diagnostico!
                                   .toLowerCase()
                                   .contains(_buscarTexto.toLowerCase()))) {
                         return Card(
@@ -325,9 +294,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               title: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    if (personas != null)
-                                      Text(
-                                          personas!.lista[index].nombreCompleto)
+                                    if (fichas != null)
+                                      Text(fichas!.ficha[index].motivoConsulta)
                                     else
                                       const Text("NULL")
                                   ]),
