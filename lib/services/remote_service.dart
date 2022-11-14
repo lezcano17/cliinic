@@ -45,15 +45,16 @@ class RemoteService {
     var response = await http.post(
       uri,
       headers: <String, String>{
+        'usuario': 'usuario1',
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode({
         'motivoConsulta': motivo,
         'diagnostico': diagnostico,
         'observacion': observacion,
-        'idEmpleado': idempleado,
-        'idCliente': idcliente,
-        'idTipoProducto': idtipoproducto,
+        'idEmpleado': {'idPersona': idempleado},
+        'idCliente': {'idPersona': idcliente},
+        'idTipoProducto': {'idTipoProducto': idtipoproducto},
       }),
     );
 
@@ -61,7 +62,9 @@ class RemoteService {
 
     print(response.statusCode);
 
-    if (response.statusCode == 201 || response.statusCode == 301) {
+    if (response.statusCode == 201 ||
+        response.statusCode == 200 ||
+        response.statusCode == 301) {
       print('agregado');
       return 'AGREGADO';
     } else {

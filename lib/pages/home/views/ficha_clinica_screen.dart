@@ -24,7 +24,7 @@ class FichaScreen extends StatefulWidget {
 }
 
 class _FichaScreenState extends State<FichaScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
   Ficha? fichas;
   var isLoaded = false;
   String _buscarTexto = '';
@@ -114,7 +114,7 @@ class _FichaScreenState extends State<FichaScreen> {
                             ),
                       ),
                       title: const Center(
-                          child: Text("Agregar Persona") // Your desired title
+                          child: Text("Agregar Ficha") // Your desired title
                           )),
                   TextField(
                     controller: _motivoController,
@@ -130,7 +130,6 @@ class _FichaScreenState extends State<FichaScreen> {
                   ),
                   TextField(
                     controller: _observacionController,
-                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(hintText: 'Observación'),
                   ),
                   TextField(
@@ -139,12 +138,10 @@ class _FichaScreenState extends State<FichaScreen> {
                   ),
                   TextField(
                     controller: _idClienteController,
-                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(hintText: 'Id Cliente'),
                   ),
                   TextField(
                     controller: _idTipoProductoController,
-                    keyboardType: TextInputType.number,
                     decoration:
                         const InputDecoration(hintText: 'Id Tipo Producto'),
                   ),
@@ -260,12 +257,35 @@ class _FichaScreenState extends State<FichaScreen> {
                                       context: context,
                                       animType: AnimType.scale,
                                       dialogType: DialogType.noHeader,
-                                      body: Center(
-                                        child: Text(
-                                          fichas!.ficha[index].motivoConsulta,
-                                          style: const TextStyle(
-                                              fontStyle: FontStyle.italic),
-                                        ),
+                                      body: Column(
+                                        children: [
+                                          Text(
+                                            'Nombre del Paciente: ${fichas!.ficha[index].idCliente.nombreCompleto}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'Motivo de la consulta: ${fichas!.ficha[index].motivoConsulta}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'Diagnóstico: ${fichas!.ficha[index].diagnostico}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'Observación: ${fichas!.ficha[index].observacion}',
+                                            style: const TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Nombre del Profesional: ${fichas!.ficha[index].idEmpleado.nombreCompleto}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ],
                                       ),
                                       title: 'This is Ignored',
                                       desc: 'This is also Ignored',

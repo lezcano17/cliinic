@@ -169,6 +169,9 @@ class _ReservaScreenState extends State<ReservaScreen> {
     if (_selectedIndex == 1) {
       Get.toNamed(Routes.getReservaRoute());
     }
+    if (_selectedIndex == 2) {
+      Get.toNamed(Routes.getFichaRoute());
+    }
   }
 
   void get_reservas() async {
