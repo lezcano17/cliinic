@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cliinic/pages/common/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -203,16 +204,52 @@ class _ReservaScreenState extends State<ReservaScreen> {
                     child: GestureDetector(
                       child: ListTile(
                         contentPadding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        leading: const Icon(Icons.assignment),
                         title: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (reservas != null)
-                                Text(reservas!.lista![index].idReserva
-                                    .toString())
+                                Text(
+                                  'Id de la reserva: ${reservas!.lista![index].idReserva}',
+                                )
                               else
                                 const Text("Laburando")
                             ]),
                       ),
+                      onTap: () => {
+                        if (reservas != null)
+                          AwesomeDialog(
+                            context: context,
+                            animType: AnimType.scale,
+                            dialogType: DialogType.noHeader,
+                            body: Column(children: [
+                              Text(
+                                'Nombre empleado: ${reservas!.lista![index].idEmpleado?.nombreCompleto}',
+                                style: const TextStyle(
+                                    fontStyle: FontStyle.italic),
+                              ),
+                              Text(
+                                'Fecha de reserva: ${reservas!.lista![index].fecha.toString().substring(0, 10)}',
+                                style: const TextStyle(
+                                    fontStyle: FontStyle.italic),
+                              ),
+                              Text(
+                                'Hora Inicio: ${reservas!.lista![index].horaInicio}',
+                                style: const TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                              Text(
+                                'Hora final: ${reservas!.lista![index].horaFin}',
+                                style: const TextStyle(
+                                    fontStyle: FontStyle.italic),
+                              ),
+                            ]),
+                            title: 'This is Ignored',
+                            desc: 'This is also Ignored',
+                            btnOkOnPress: () {},
+                          )..show(),
+                      },
                     ));
               }))),
       floatingActionButton: FloatingActionButton(
