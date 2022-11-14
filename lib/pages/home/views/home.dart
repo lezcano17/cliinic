@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       var cedula = _cedulaController.text;
                       var tipoPersona = _tipoPersonaController.text;
                       var FechaNacimiento =
-                          _fechaNacController.text + ' 00:00:00';
+                          '${_fechaNacController.text} 00:00:00';
 
                       print(FechaNacimiento);
 
@@ -289,13 +289,48 @@ class _HomeScreenState extends State<HomeScreen> {
                                       context: context,
                                       animType: AnimType.scale,
                                       dialogType: DialogType.noHeader,
-                                      body: Center(
-                                        child: Text(
-                                          personas!.lista[index].nombreCompleto,
+                                      body: Column(children: [
+                                        Text(
+                                          'ID Persona: ${personas!.lista[index].idPersona}',
                                           style: const TextStyle(
                                               fontStyle: FontStyle.italic),
                                         ),
-                                      ),
+                                        Text(
+                                          'Nombre: ${personas!.lista[index].nombreCompleto}',
+                                          style: const TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        Text(
+                                          'Email: ${personas!.lista[index].email}',
+                                          style: const TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        Text(
+                                          'Telefono: ${personas!.lista[index].telefono}',
+                                          style: const TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        Text(
+                                          'Cedula: ${personas!.lista[index].cedula}',
+                                          style: const TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        Text(
+                                          'RUC: ${personas!.lista[index].ruc}',
+                                          style: const TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        Text(
+                                          'Tipo Persona: ${personas!.lista[index].tipoPersona.toString().substring(personas!.lista[index].tipoPersona.toString().indexOf('.') + 1, personas!.lista[index].tipoPersona.toString().length)}',
+                                          style: const TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        Text(
+                                          'Fecha de Nacimiento: ${personas!.lista[index].fechaNacimiento.toString().substring(0, 10)}',
+                                          style: const TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                      ]),
                                       title: 'This is Ignored',
                                       desc: 'This is also Ignored',
                                       btnOkOnPress: () {},
@@ -312,24 +347,80 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .toLowerCase()
                                   .contains(_buscarTexto.toLowerCase()))) {
                         return Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            margin:
-                                const EdgeInsets.only(top: 5.0, bottom: 5.0),
-                            elevation: 0,
-                            child: ListTile(
-                              contentPadding:
-                                  const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                          elevation: 0,
+                          child: GestureDetector(
+                              child: ListTile(
+                                contentPadding:
+                                    const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                leading: Icon(Icons.account_circle_outlined),
+                                title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      if (personas != null)
+                                        Text(personas!
+                                            .lista[index].nombreCompleto)
+                                      else
+                                        const Text("Laburando")
+                                    ]),
+                              ),
+                              onTap: () => {
                                     if (personas != null)
-                                      Text(
-                                          personas!.lista[index].nombreCompleto)
-                                    else
-                                      const Text("NULL")
-                                  ]),
-                            ));
+                                      AwesomeDialog(
+                                        context: context,
+                                        animType: AnimType.scale,
+                                        dialogType: DialogType.noHeader,
+                                        body: Column(children: [
+                                          Text(
+                                            'ID Persona: ${personas!.lista[index].idPersona}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'Nombre: ${personas!.lista[index].nombreCompleto}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'Email: ${personas!.lista[index].email}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'Telefono: ${personas!.lista[index].telefono}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'Cedula: ${personas!.lista[index].cedula}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'RUC: ${personas!.lista[index].ruc}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'Tipo Persona: ${personas!.lista[index].tipoPersona.toString().substring(personas!.lista[index].tipoPersona.toString().indexOf('.') + 1, personas!.lista[index].tipoPersona.toString().length)}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            'Fecha de Nacimiento: ${personas!.lista[index].fechaNacimiento.toString().substring(0, 10)}',
+                                            style: const TextStyle(
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                        ]),
+                                        title: 'This is Ignored',
+                                        desc: 'This is also Ignored',
+                                        btnOkOnPress: () {},
+                                      )..show(),
+                                  }),
+                        );
                       } else {
                         return Container();
                       }
